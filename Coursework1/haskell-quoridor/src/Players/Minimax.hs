@@ -59,7 +59,14 @@ negResult (Result x as) = Result (-x) as
 -- [Note: To speed things up, you may want to, at this stage, heuristically select which actions are 
 --  more relevant. In particular, you probably don't want to consider every single possible wall.]
 generateGameTree :: Game -> GameTree
-generateGameTree = undefined
+generateGameTree g = StateTree g [ ( a , generateGameTree (fromJust (performAction g a) ) )  | a <- validActions g] 
+
+generateGameTreeHelp :: Maybe Game -> Game
+generateGameTreeHelp (Just g) = g
+generateGameTreeHelp Nothing = undefined
+
+generateGameTreeSpeedUp :: Action -> Bool
+generateGameTreeSpeedUp a = undefined
 
 {-
     *** PART I.b (5pt) ***
