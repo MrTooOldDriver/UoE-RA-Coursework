@@ -3,7 +3,7 @@
 
     *** PART I (60pt) and PART II (10pt) *** 
 -}
-module Players.Minimax where 
+module Players.Minimax where
 
 import Data.Maybe
 import Data.Graph
@@ -16,7 +16,7 @@ import Types
 import Constants
 import Cell
 import Action
-import Board 
+import Board
 import Player
 import Game
 import Players.Dumb (dumbAction)
@@ -27,12 +27,12 @@ import Players.Dumb (dumbAction)
 
 -- Map a function through the nodes of the tree.
 mapStateTree :: (v -> w) -> StateTree v a -> StateTree w a
-mapStateTree f (StateTree x ts) = StateTree (f x) [(a, mapStateTree f t) | (a, t)<-ts]
+mapStateTree f (StateTree x ts) = StateTree (f x) [(a, mapStateTree f t) | (a, t)<-ts]
 
 -- Calculate the depth of the tree (used to test pruneDepth).
-stateTreeDepth :: StateTree v a -> Int 
+stateTreeDepth :: StateTree v a -> Int
 stateTreeDepth (StateTree _ []) = 0
-stateTreeDepth (StateTree _ ts) = 1 + (maximum (map (stateTreeDepth . snd) ts))
+stateTreeDepth (StateTree _ ts) = 1 + maximum (map (stateTreeDepth . snd) ts)
 
 -- Calculate the breadth of the tree (used to test pruneBreadth).
 stateTreeBreadth :: StateTree v a -> Int
@@ -59,14 +59,16 @@ negResult (Result x as) = Result (-x) as
 -- [Note: To speed things up, you may want to, at this stage, heuristically select which actions are 
 --  more relevant. In particular, you probably don't want to consider every single possible wall.]
 generateGameTree :: Game -> GameTree
-generateGameTree g = StateTree g [ ( a , generateGameTree (fromJust (performAction g a) ) )  | a <- validActions g] 
+generateGameTree (Game b ps) = StateTree (Game b ps) [ ( a , generateGameTree (fromJust (performAction (Game b ps) a) ) )  | a <- validActions (Game b ps), generateGameTreeSpeedUp a ps]
 
 generateGameTreeHelp :: Maybe Game -> Game
 generateGameTreeHelp (Just g) = g
 generateGameTreeHelp Nothing = undefined
 
-generateGameTreeSpeedUp :: Action -> Bool
-generateGameTreeSpeedUp a = undefined
+generateGameTreeSpeedUp :: Action -> [Player]-> Bool
+-- generateGameTreeSpeedUp _ _ = True
+generateGameTreeSpeedUp (Place ((c1, c2),(c3, c4))) ps = or[(c1 == currentCell p) || (c2 == currentCell p) || (c3 == currentCell p) || (c4 == currentCell p) | p <- ps]
+generateGameTreeSpeedUp (Move _) p = True
 
 {-
     *** PART I.b (5pt) ***
@@ -79,12 +81,22 @@ generateGameTreeSpeedUp a = undefined
 -- Higher scoring nodes go first.
 -- [Hint: You should use 'lowFirst'.]
 highFirst :: (Ord v) => StateTree v a -> StateTree v a
-highFirst = undefined
+highFirst (StateTree v a) = StateTree v (sortBy highFirstHelper [(a1, lowFirst v1)| (a1,v1)<-a] )
+
+highFirstHelper (_, StateTree v1 _) (_, StateTree v2 _)
+  | v1 < v2 = GT
+  | v1 > v2 = LT
+  | v1 == v2 = EQ
 
 -- Lower scoring nodes go first.
 -- [Hint: You should use 'highFirst'.]
 lowFirst :: (Ord v) => StateTree v a -> StateTree v a
-lowFirst = undefined
+lowFirst (StateTree v a)  = StateTree v (sortBy lowFirstHelper [(a1, highFirst v1)| (a1,v1)<-a] )
+
+lowFirstHelper (_, StateTree v1 a1) (_, StateTree v2 a2)
+  | v1 < v2 = LT
+  | v1 > v2 = GT
+  | v1 == v2 = EQ
 
 {-
     *** Part I.c (5pt) ***
@@ -98,7 +110,9 @@ lowFirst = undefined
 -- exceeded. 
 -- [Hint: You may want to use guards and recursion.]
 pruneDepth :: Int -> StateTree v a -> StateTree v a
-pruneDepth = undefined
+pruneDepth i (StateTree v a)
+    | i > 0 = StateTree v [(a1, pruneDepth (i - 1) v1) | (a1,v1)<-a ]
+    | i == 0 = StateTree v []
 
 {-
     *** Part I.d (5pt) ***
@@ -111,7 +125,7 @@ pruneDepth = undefined
 -- every node. 
 -- [Hint: Use 'take'.]
 pruneBreadth :: Int -> StateTree v a -> StateTree v a
-pruneBreadth = undefined
+pruneBreadth i (StateTree v a) = StateTree v (take i [(a1, pruneBreadth i v1) | (a1,v1)<-a ])
 
 {-
     *** Part I.e (15pt) ***
@@ -125,12 +139,22 @@ pruneBreadth = undefined
 -- [Hint 1: You may want to calculate the distance between the player's current cell and its winning
 --  positions.]
 -- [Hint 2: One way would be to use 'reachableCells' repeatedly.]
-utility :: Game -> Int 
-utility = undefined
+utility :: Game -> Int
+utility (Game b ps) = utilityHelp (Game b ps) [] (reachableCells b (currentCell (head ps)))
+
+utilityHelp :: Game -> [Cell] -> [Cell] -> Int
+utilityHelp (Game b ps) cpast cs
+    | utilityCheckWinnings cs (head ps) = -1
+    | null ([c |c <- cs, c `notElem` cpast]) = -10000
+    | otherwise = -1 + maximum[utilityHelp (Game b ps) (cpast ++ [c]) (reachableCells b c)|c <- cs, c `notElem` cpast]
+
+utilityCheckWinnings :: [Cell] -> Player -> Bool
+utilityCheckWinnings cs ps = or[c `elem` (winningPositions ps)|c <- cs]
+
 
 -- Lifting the utility function to work on trees.
-evalTree :: GameTree -> EvalTree 
-evalTree = mapStateTree utility 
+evalTree :: GameTree -> EvalTree
+evalTree = mapStateTree utility
 
 {-
     *** Part I.f (20pt) ***
@@ -144,7 +168,26 @@ evalTree = mapStateTree utility
 -- [Hint 1: Use a helper function to keep track of the highest and lowest scores.]
 -- [Hint 2: Use the 'Result' datatype.]
 minimaxFromTree :: EvalTree -> Action
-minimaxFromTree = undefined
+minimaxFromTree e = minimaxFromTreeConverter (minimaxFromTreeNew e)
+
+minimaxFromTreeNew :: EvalTree -> Result
+minimaxFromTreeNew (StateTree i []) = Result i []
+minimaxFromTreeNew (StateTree i as) = negResult (minimum( [ addActionToResult a (minimaxFromTreeNew e) | (a,e) <- as ] ))
+
+
+minFromTree :: EvalTree -> Result
+minFromTree (StateTree i []) = Result i []
+minFromTree (StateTree _ as) = minimum[ addActionToResult a (maxFromTree e) | (a,e) <- as ]
+
+maxFromTree :: EvalTree -> Result
+maxFromTree (StateTree i []) = Result i []
+maxFromTree (StateTree _ as) = maximum[ addActionToResult a (minFromTree e) | (a,e) <- as ]
+
+addActionToResult :: Action -> Result -> Result
+addActionToResult a (Result i as) = Result i (a : as)
+
+minimaxFromTreeConverter :: Result -> Action
+minimaxFromTreeConverter (Result i as) = head as
 
 {-
     *** Part II (10pt) ***
@@ -157,18 +200,18 @@ minimaxFromTree = undefined
 -- [Hint 1: Extend the helper function in I.e to keep track of alpha and beta.]
 -- [Hint 2: Use the 'Result' datatype.]
 minimaxABFromTree :: EvalTree -> Action
-minimaxABFromTree = undefined 
+minimaxABFromTree = undefined
 
 {-
     Putting everything together.
 -}
 
 -- Given depth for pruning (should be even).
-depth :: Int 
+depth :: Int
 depth = 4
 
 -- Given breadth for pruning.
-breadth :: Int 
+breadth :: Int
 breadth = 10
 
 -- Function that combines all the different parts implemented in Part I.
@@ -179,12 +222,12 @@ minimax =
     . highFirst
     . evalTree
     . pruneDepth depth
-    . generateGameTree 
+    . generateGameTree
 
 -- Given a game state, calls minimax and returns an action.
 minimaxAction :: Board -> [Player] -> String -> Int -> Maybe Action
 minimaxAction b ps _ r = let g = Game b ps in minimaxAction' g (minimax g)
-    where 
+    where
         -- Goes through the list of actions until it finds a valid one. 
         minimaxAction' :: Game -> Action -> Maybe Action
         minimaxAction' g' (Move s)
@@ -199,7 +242,7 @@ makeMinimaxPlayer :: String -> Cell -> Int -> [Cell] -> Player
 makeMinimaxPlayer n c rws wps = Player {
     name = n,
     turn = 1,
-    currentCell = c, 
+    currentCell = c,
     remainingWalls = rws,
     winningPositions = wps,
     isHuman = False,
