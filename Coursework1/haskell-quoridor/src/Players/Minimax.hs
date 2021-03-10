@@ -145,12 +145,13 @@ utility (Game b ps) = utilityHelp (Game b ps) [] (reachableCells b (currentCell 
 utilityHelp :: Game -> [Cell] -> [Cell] -> Int
 utilityHelp (Game b ps) cpast cs
     | utilityCheckWinnings cs (head ps) = -1
-    | null ([c |c <- cs, c `notElem` cpast]) = -10000
+    | null ([c |c <- cs, c `notElem` cpast]) = -1000
     | otherwise = -1 + maximum[utilityHelp (Game b ps) (cpast ++ [c]) (reachableCells b c)|c <- cs, c `notElem` cpast]
 
 utilityCheckWinnings :: [Cell] -> Player -> Bool
 utilityCheckWinnings cs ps = or[c `elem` (winningPositions ps)|c <- cs]
 
+-- reachableCells until upper bound
 
 -- Lifting the utility function to work on trees.
 evalTree :: GameTree -> EvalTree
@@ -168,20 +169,19 @@ evalTree = mapStateTree utility
 -- [Hint 1: Use a helper function to keep track of the highest and lowest scores.]
 -- [Hint 2: Use the 'Result' datatype.]
 minimaxFromTree :: EvalTree -> Action
-minimaxFromTree e = minimaxFromTreeConverter (minimaxFromTreeNew e)
+minimaxFromTree e = minimaxFromTreeConverter (maxFromTree e)
 
-minimaxFromTreeNew :: EvalTree -> Result
-minimaxFromTreeNew (StateTree i []) = Result i []
-minimaxFromTreeNew (StateTree i as) = negResult (minimum( [ addActionToResult a (minimaxFromTreeNew e) | (a,e) <- as ] ))
-
+-- minimaxFromTreeNew :: EvalTree -> Result
+-- minimaxFromTreeNew (StateTree i []) = Result i []
+-- minimaxFromTreeNew (StateTree i as) = negResult (minimum( [ addActionToResult a (minimaxFromTreeNew e) | (a,e) <- as ] ))
 
 minFromTree :: EvalTree -> Result
 minFromTree (StateTree i []) = Result i []
-minFromTree (StateTree _ as) = minimum[ addActionToResult a (maxFromTree e) | (a,e) <- as ]
+minFromTree (StateTree _ as) = minimum ([ addActionToResult a (maxFromTree e) | (a,e) <- as ])
 
 maxFromTree :: EvalTree -> Result
 maxFromTree (StateTree i []) = Result i []
-maxFromTree (StateTree _ as) = maximum[ addActionToResult a (minFromTree e) | (a,e) <- as ]
+maxFromTree (StateTree _ as) = maximum ([ addActionToResult a (minFromTree e) | (a,e) <- as ])
 
 addActionToResult :: Action -> Result -> Result
 addActionToResult a (Result i as) = Result i (a : as)
@@ -200,7 +200,31 @@ minimaxFromTreeConverter (Result i as) = head as
 -- [Hint 1: Extend the helper function in I.e to keep track of alpha and beta.]
 -- [Hint 2: Use the 'Result' datatype.]
 minimaxABFromTree :: EvalTree -> Action
-minimaxABFromTree = undefined
+minimaxABFromTree es = minimaxFromTreeConverter (maxABFromTree es (Result (-100000) []) (Result 100000 []))
+
+maxABFromTree :: EvalTree -> Result -> Result -> Result
+maxABFromTree (StateTree i []) alpha beta = Result i []
+maxABFromTree (StateTree _ aes) alpha beta = maxABFromTreeLoopHelper aes alpha beta (Result (-100000) [])
+
+maxABFromTreeLoopHelper :: [(Action,EvalTree)] -> Result -> Result -> Result -> Result
+maxABFromTreeLoopHelper [] _ _ v = v
+maxABFromTreeLoopHelper ((a,e):es) alpha beta v
+    | v' >= beta =  v'
+    | otherwise = addActionToResult a (maxABFromTreeLoopHelper es a' beta v')
+        where v' = v `max` minABFromTree e alpha beta
+              a' = v' `max` alpha
+
+minABFromTree :: EvalTree -> Result -> Result -> Result
+minABFromTree (StateTree i []) alpha beta = Result i []
+minABFromTree (StateTree _ aes) alpha beta = minABFromTreeLoopHelper aes alpha beta (Result 100000 [])
+
+minABFromTreeLoopHelper :: [(Action,EvalTree)] -> Result -> Result -> Result -> Result
+minABFromTreeLoopHelper [] _ _ v = v
+minABFromTreeLoopHelper ((a,e):es) alpha beta v
+    | v' <= alpha =  v'
+    | otherwise = addActionToResult a (minABFromTreeLoopHelper es alpha b' v')
+        where v' = v `min` maxABFromTree e alpha beta
+              b' = v' `min` beta
 
 {-
     Putting everything together.
