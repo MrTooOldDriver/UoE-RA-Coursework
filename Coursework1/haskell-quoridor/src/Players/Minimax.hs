@@ -139,14 +139,25 @@ pruneBreadth i (StateTree v a) = StateTree v (take i [(a1, pruneBreadth i v1) | 
 -- [Hint 1: You may want to calculate the distance between the player's current cell and its winning
 --  positions.]
 -- [Hint 2: One way would be to use 'reachableCells' repeatedly.]
-utility :: Game -> Int
-utility (Game b ps) = utilityHelp (Game b ps) [] (reachableCells b (currentCell (head ps)))
 
-utilityHelp :: Game -> [Cell] -> [Cell] -> Int
-utilityHelp (Game b ps) cpast cs
-    | utilityCheckWinnings cs (head ps) = -1
-    | null ([c |c <- cs, c `notElem` cpast]) = -1000
-    | otherwise = -1 + maximum[utilityHelp (Game b ps) (cpast ++ [c]) (reachableCells b c)|c <- cs, c `notElem` cpast]
+utility :: Game -> Int
+utility (Game b ps) = utilityLooper [currentCell (head ps)] (Game b ps) 0
+
+utilityLooper :: [Cell] -> Game -> Int -> Int
+utilityLooper cs (Game b ps) i
+    | i == -50 = i
+    | utilityCheckWinnings cs (head ps) = i
+    | otherwise = utilityLooper (concat[reachableCells b c|c <- cs]) (Game b ps) (i-1)
+
+
+-- utility :: Game -> Int
+-- utility (Game b ps) = utilityHelp (Game b ps) [] (reachableCells b (currentCell (head ps)))
+
+-- utilityHelp :: Game -> [Cell] -> [Cell] -> Int
+-- utilityHelp (Game b ps) cpast cs
+--     | utilityCheckWinnings cs (head ps) = -1
+--     | null ([c |c <- cs, c `notElem` cpast]) = -1000
+--     | otherwise = -1 + maximum[utilityHelp (Game b ps) (cpast ++ [c]) (reachableCells b c)|c <- cs, c `notElem` cpast]
 
 utilityCheckWinnings :: [Cell] -> Player -> Bool
 utilityCheckWinnings cs ps = or[c `elem` (winningPositions ps)|c <- cs]
@@ -210,8 +221,8 @@ maxABFromTreeLoopHelper :: [(Action,EvalTree)] -> Result -> Result -> Result -> 
 maxABFromTreeLoopHelper [] _ _ v = v
 maxABFromTreeLoopHelper ((a,e):es) alpha beta v
     | v' >= beta =  v'
-    | otherwise = addActionToResult a (maxABFromTreeLoopHelper es a' beta v')
-        where v' = v `max` minABFromTree e alpha beta
+    | otherwise = maxABFromTreeLoopHelper es a' beta v'
+        where v' = v `max` (addActionToResult a (minABFromTree e alpha beta)) 
               a' = v' `max` alpha
 
 minABFromTree :: EvalTree -> Result -> Result -> Result
@@ -222,8 +233,8 @@ minABFromTreeLoopHelper :: [(Action,EvalTree)] -> Result -> Result -> Result -> 
 minABFromTreeLoopHelper [] _ _ v = v
 minABFromTreeLoopHelper ((a,e):es) alpha beta v
     | v' <= alpha =  v'
-    | otherwise = addActionToResult a (minABFromTreeLoopHelper es alpha b' v')
-        where v' = v `min` maxABFromTree e alpha beta
+    | otherwise = minABFromTreeLoopHelper es alpha b' v'
+        where v' = v `min` (addActionToResult a (maxABFromTree e alpha beta)) 
               b' = v' `min` beta
 
 {-
@@ -241,7 +252,8 @@ breadth = 10
 -- Function that combines all the different parts implemented in Part I.
 minimax :: Game -> Action
 minimax =
-      minimaxFromTree -- or 'minimaxABFromTree'
+    --   minimaxFromTree -- or 'minimaxABFromTree'
+      minimaxABFromTree -- or 'minimaxABFromTree'
     . pruneBreadth breadth
     . highFirst
     . evalTree
