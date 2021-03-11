@@ -160,19 +160,28 @@ pruneBreadth i (StateTree v a) = StateTree v (take i [(a1, pruneBreadth i v1) | 
 --     | otherwise = maximum[utilityHelp (Game b ps) (cpast ++ [c]) (reachableCells b c) (i-1)|c <- cs, c `notElem` cpast]
 
 
+-- utility :: Game -> Int
+-- utility (Game b ps) = utilityHelp (Game b ps) [] (reachableCells b (currentCell (head ps))) 0
+
+-- utilityHelp :: Game -> [Cell] -> [Cell] -> Int -> Int
+-- utilityHelp (Game b ps) cpast cs interCount
+--     | interCount >= (boardSize*2) = -100
+--     | utilityCheckWinnings cs (head ps) = -1
+--     | null ([c |c <- cs, c `notElem` cpast]) = -100
+--     | otherwise = -1 + maximum[utilityHelp (Game b ps) (cpast ++ [c]) (reachableCells b c) (interCount+1)|c <- cs, c `notElem` cpast]
 
 utility :: Game -> Int
-utility (Game b ps) = utilityHelp (Game b ps) [] (reachableCells b (currentCell (head ps))) 0
+utility (Game b ps) = utilityHelp (Game b ps) [] (reachableCells b (currentCell (head ps)))
 
-utilityHelp :: Game -> [Cell] -> [Cell] -> Int -> Int
-utilityHelp (Game b ps) cpast cs interCount
-    | interCount >= (boardSize*3) = -10000
+utilityHelp :: Game -> [Cell] -> [Cell] -> Int
+utilityHelp (Game b ps) cpast cs
     | utilityCheckWinnings cs (head ps) = -1
     | null ([c |c <- cs, c `notElem` cpast]) = -10000
-    | otherwise = -1 + maximum[utilityHelp (Game b ps) (cpast ++ [c]) (reachableCells b c) (interCount+1)|c <- cs, c `notElem` cpast]
+    | otherwise = -1 + maximum[utilityHelp (Game b ps) (cpast ++ [c]) (reachableCells b c)|c <- cs, c `notElem` cpast]
 
 utilityCheckWinnings :: [Cell] -> Player -> Bool
 utilityCheckWinnings cs ps = or[c `elem` (winningPositions ps)|c <- cs]
+
 
 -- reachableCells until upper bound
 
@@ -259,7 +268,7 @@ depth = 4
 
 -- Given breadth for pruning.
 breadth :: Int
-breadth = 10
+breadth = 2
 
 -- Function that combines all the different parts implemented in Part I.
 minimax :: Game -> Action
