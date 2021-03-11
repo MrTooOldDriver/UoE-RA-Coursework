@@ -140,24 +140,36 @@ pruneBreadth i (StateTree v a) = StateTree v (take i [(a1, pruneBreadth i v1) | 
 --  positions.]
 -- [Hint 2: One way would be to use 'reachableCells' repeatedly.]
 
-utility :: Game -> Int
-utility (Game b ps) = utilityLooper [currentCell (head ps)] (Game b ps) 0
+-- utility :: Game -> Int
+-- utility (Game b ps) = utilityLooper [currentCell (head ps)] (Game b ps) 0
 
-utilityLooper :: [Cell] -> Game -> Int -> Int
-utilityLooper cs (Game b ps) i
-    | i == -50 = i
-    | utilityCheckWinnings cs (head ps) = i
-    | otherwise = utilityLooper (concat[reachableCells b c|c <- cs]) (Game b ps) (i-1)
-
+-- utilityLooper :: [Cell] -> Game -> Int -> Int
+-- utilityLooper cs (Game b ps) i
+--     | i == -50 = i
+--     | utilityCheckWinnings cs (head ps) = i
+--     | otherwise = utilityLooper (concat[reachableCells b c|c <- cs]) (Game b ps) (i-1)
 
 -- utility :: Game -> Int
--- utility (Game b ps) = utilityHelp (Game b ps) [] (reachableCells b (currentCell (head ps)))
+-- utility (Game b ps) = utilityHelp (Game b ps) [] (reachableCells b (currentCell (head ps))) (-1)
 
--- utilityHelp :: Game -> [Cell] -> [Cell] -> Int
--- utilityHelp (Game b ps) cpast cs
---     | utilityCheckWinnings cs (head ps) = -1
---     | null ([c |c <- cs, c `notElem` cpast]) = -1000
---     | otherwise = -1 + maximum[utilityHelp (Game b ps) (cpast ++ [c]) (reachableCells b c)|c <- cs, c `notElem` cpast]
+-- utilityHelp :: Game -> [Cell] -> [Cell] -> Int -> Int
+-- utilityHelp (Game b ps) cpast cs i
+--     | i == -(boardSize * boardSize*2) = i
+--     | utilityCheckWinnings cs (head ps) = i
+--     | null ([c |c <- cs, c `notElem` cpast]) = i
+--     | otherwise = maximum[utilityHelp (Game b ps) (cpast ++ [c]) (reachableCells b c) (i-1)|c <- cs, c `notElem` cpast]
+
+
+
+utility :: Game -> Int
+utility (Game b ps) = utilityHelp (Game b ps) [] (reachableCells b (currentCell (head ps))) 0
+
+utilityHelp :: Game -> [Cell] -> [Cell] -> Int -> Int
+utilityHelp (Game b ps) cpast cs interCount
+    | interCount >= (boardSize*3) = -10000
+    | utilityCheckWinnings cs (head ps) = -1
+    | null ([c |c <- cs, c `notElem` cpast]) = -10000
+    | otherwise = -1 + maximum[utilityHelp (Game b ps) (cpast ++ [c]) (reachableCells b c) (interCount+1)|c <- cs, c `notElem` cpast]
 
 utilityCheckWinnings :: [Cell] -> Player -> Bool
 utilityCheckWinnings cs ps = or[c `elem` (winningPositions ps)|c <- cs]
@@ -222,7 +234,7 @@ maxABFromTreeLoopHelper [] _ _ v = v
 maxABFromTreeLoopHelper ((a,e):es) alpha beta v
     | v' >= beta =  v'
     | otherwise = maxABFromTreeLoopHelper es a' beta v'
-        where v' = v `max` (addActionToResult a (minABFromTree e alpha beta)) 
+        where v' = v `max` (addActionToResult a (minABFromTree e alpha beta))
               a' = v' `max` alpha
 
 minABFromTree :: EvalTree -> Result -> Result -> Result
@@ -234,7 +246,7 @@ minABFromTreeLoopHelper [] _ _ v = v
 minABFromTreeLoopHelper ((a,e):es) alpha beta v
     | v' <= alpha =  v'
     | otherwise = minABFromTreeLoopHelper es alpha b' v'
-        where v' = v `min` (addActionToResult a (maxABFromTree e alpha beta)) 
+        where v' = v `min` (addActionToResult a (maxABFromTree e alpha beta))
               b' = v' `min` beta
 
 {-
