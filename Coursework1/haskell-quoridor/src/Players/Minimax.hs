@@ -249,8 +249,8 @@ maxABFromTreeLoopHelper [] _ _ v = v
 maxABFromTreeLoopHelper ((a,e):es) alpha beta v
     | v' >= beta =  v'
     | otherwise = maxABFromTreeLoopHelper es a' beta v'
-        where v' = v `max` (addActionToResult a (minABFromTree e alpha beta))
-              a' = v' `max` alpha
+        where v' = (addActionToResult a (minABFromTree e alpha beta)) `max` v
+              a' = alpha `max` v'
 
 minABFromTree :: EvalTree -> Result -> Result -> Result
 minABFromTree (StateTree i []) alpha beta = Result i []
@@ -261,8 +261,8 @@ minABFromTreeLoopHelper [] _ _ v = v
 minABFromTreeLoopHelper ((a,e):es) alpha beta v
     | v' <= alpha =  v'
     | otherwise = minABFromTreeLoopHelper es alpha b' v'
-        where v' = v `min` (addActionToResult a (maxABFromTree e alpha beta))
-              b' = v' `min` beta
+        where v' = (addActionToResult a (maxABFromTree e alpha beta)) `min` v
+              b' = beta `min` v'
 
 {-
     Putting everything together.
