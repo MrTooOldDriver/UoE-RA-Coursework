@@ -50,9 +50,21 @@ cellTop (i, j) = (i, j + 1)
 cellBottom :: Cell -> Cell 
 cellBottom (i, j) = (i, j - 1)
 
+cellTopLeft :: Cell -> Cell
+cellTopLeft (i, j) = (columnLeft i, j+1)
+
+cellTopRight :: Cell -> Cell 
+cellTopRight (i, j) = (columnRight i, j+1)
+
+cellDownLeft :: Cell -> Cell
+cellDownLeft (i, j) = (columnLeft i, j-1)
+
+cellDownRight :: Cell -> Cell 
+cellDownRight (i, j) = (columnRight i, j-1)
+
 -- All surrounding cells.
 cellsAround :: Cell -> [Cell]
-cellsAround c = [cellLeft c, cellRight c, cellTop c, cellBottom c]
+cellsAround c = [cellLeft c, cellRight c, cellTop c, cellBottom c, cellTopLeft c, cellTopRight c, cellDownLeft c, cellDownRight c]
 
 {-
     Cells in board. 
@@ -76,7 +88,9 @@ cellsAroundInBoard c = filter cellInBoard (cellsAround c)
 
 -- 'Taxicab' distance between cells.
 distance :: Cell -> Cell -> Int 
-distance (i, j) (i', j') = abs ((columnToInt i') - (columnToInt i)) + abs (j' - j)
+distance (i, j) (i', j')
+    | (abs(columnToInt i') - (columnToInt i) == 1) && (abs(j' - j) == 1) = 1
+    | otherwise = abs ((columnToInt i') - (columnToInt i)) + abs (j' - j)
 
 -- A quick way of computing: c `elem` (cellsAround c').
 isAdjacent :: Cell -> Cell -> Bool 

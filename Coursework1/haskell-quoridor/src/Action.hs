@@ -44,9 +44,21 @@ stepTop c = (c, cellTop c)
 stepBottom :: Cell -> Step 
 stepBottom c = (c, cellBottom c)
 
+stepAdjUpLeft :: Cell -> Step 
+stepAdjUpLeft c = (c, cellTopLeft c)
+
+stepAdjUpRight :: Cell -> Step 
+stepAdjUpRight c = (c, cellTopRight c)
+
+stepAdjDownLeft :: Cell -> Step 
+stepAdjDownLeft c = (c, cellDownLeft c)
+
+stepAdjDownRight :: Cell -> Step 
+stepAdjDownRight c = (c, cellDownRight c)
+
 -- All steps.
 allStepsFrom :: Cell -> [Step]
-allStepsFrom c = [stepLeft c, stepRight c, stepTop c, stepBottom c]
+allStepsFrom c = [stepLeft c, stepRight c, stepTop c, stepBottom c, stepAdjUpLeft c, stepAdjUpRight c, stepAdjDownLeft c, stepAdjDownRight c]
 
 -- Make steps.
 makeSteps :: Cell -> [Cell] -> [Step]
