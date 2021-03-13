@@ -3,7 +3,7 @@
 
     *** PART I (60pt) and PART II (10pt) *** 
 -}
-module Players.Minimax where
+module Players.MinimaxEZ where
 
 import Data.Maybe
 import Data.Graph
@@ -254,9 +254,10 @@ maxABFromTreeLoopHelper [] _ _ v = v
 maxABFromTreeLoopHelper ((a,e):es) alpha beta v
     | v' >= beta =  v'
     | otherwise = maxABFromTreeLoopHelper es a' beta v'
-        -- where v' = (addActionToResult a (minABFromTree e alpha beta)) `max` v
-        where v' = v `max` (addActionToResult a (minABFromTree e alpha beta))
+        where v' = (addActionToResult a (minABFromTree e alpha beta)) `max` v
+        -- where v' = v `max` (addActionToResult a (minABFromTree e alpha beta))
               a' = alpha `max` v'
+            --   a' = v' `max` alpha
 
 minABFromTree :: EvalTree -> Result -> Result -> Result
 minABFromTree (StateTree i []) alpha beta = Result i []
@@ -267,27 +268,27 @@ minABFromTreeLoopHelper [] _ _ v = v
 minABFromTreeLoopHelper ((a,e):es) alpha beta v
     | v' <= alpha =  v'
     | otherwise = minABFromTreeLoopHelper es alpha b' v'
-        -- where v' = (addActionToResult a (maxABFromTree e alpha beta)) `min` v
-        where v' = v `min` (addActionToResult a (maxABFromTree e alpha beta))
+        where v' = (addActionToResult a (maxABFromTree e alpha beta)) `min` v
+        -- where v' = v `min` (addActionToResult a (maxABFromTree e alpha beta))
               b' = beta `min` v'
-
+            --   b' = v' `min` beta
 {-
     Putting everything together.
 -}
 
 -- Given depth for pruning (should be even).
 depth :: Int
-depth = 4
+depth = 2
 
 -- Given breadth for pruning.
 breadth :: Int
-breadth = 10
+breadth = 20
 
 -- Function that combines all the different parts implemented in Part I.
 minimax :: Game -> Action
 minimax =
-      minimaxFromTree -- or 'minimaxABFromTree'
-    --   minimaxABFromTree -- or 'minimaxABFromTree'
+    --   minimaxFromTree -- or 'minimaxABFromTree'
+      minimaxABFromTree -- or 'minimaxABFromTree'
     . pruneBreadth breadth
     . highFirst
     . evalTree
@@ -308,8 +309,8 @@ minimaxAction b ps _ r = let g = Game b ps in minimaxAction' g (minimax g)
             | otherwise = error "Minimax chose an invalid action."
 
 -- Make minimaxPlayer in the usual way using 'minimaxAction'.
-makeMinimaxPlayer :: String -> Cell -> Int -> [Cell] -> Player
-makeMinimaxPlayer n c rws wps = Player {
+makeMinimaxPlayerEZ :: String -> Cell -> Int -> [Cell] -> Player
+makeMinimaxPlayerEZ n c rws wps = Player {
     name = n,
     turn = 1,
     currentCell = c,

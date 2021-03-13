@@ -20,6 +20,7 @@ import Player
 import Players.Human 
 import Players.Dumb 
 import Players.Minimax
+import Players.MinimaxEZ
 import Players.Reed
 import Game 
 import Print
@@ -63,6 +64,7 @@ nameToPlayerConstructor :: String -> Maybe (String -> Cell -> Int -> [Cell] -> P
 nameToPlayerConstructor "Human" = Just makeHumanPlayer
 nameToPlayerConstructor "Dumb" = Just makeDumbPlayer
 nameToPlayerConstructor "Minimax" = Just makeMinimaxPlayer
+nameToPlayerConstructor "MinimaxEZ" = Just makeMinimaxPlayerEZ
 nameToPlayerConstructor "Reed" = Just makeReedPlayer
 nameToPlayerConstructor _ = Nothing
 
@@ -106,9 +108,9 @@ play g@(Game b ps) =
 -- want to play and then calls the main game loop.
 main :: IO ()
 main = do {
-    putStrLn "What kind of player is player X? (Human/Dumb/Minimax/Reed)";
+    putStrLn "What kind of player is player X? (Human/Dumb/Minimax/MinimaxEZ/Reed)";
     playerX<-getLine;
-    putStrLn "What kind of player is player Y? (Human/Dumb/Minimax/Reed)";
+    putStrLn "What kind of player is player Y? (Human/Dumb/Minimax/MinimaxEZ/Reed)";
     playerY<-getLine; 
     case (nameToPlayerConstructor playerX, nameToPlayerConstructor playerY) of 
         (Just ctrX, Just ctrY) -> do { play (Game startingBoard (startingPlayersMiddle ctrX ctrY)) }

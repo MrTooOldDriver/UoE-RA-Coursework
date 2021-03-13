@@ -58,7 +58,8 @@ stepAdjDownRight c = (c, cellDownRight c)
 
 -- All steps.
 allStepsFrom :: Cell -> [Step]
-allStepsFrom c = [stepLeft c, stepRight c, stepTop c, stepBottom c, stepAdjUpLeft c, stepAdjUpRight c, stepAdjDownLeft c, stepAdjDownRight c]
+-- allStepsFrom c = [stepLeft c, stepRight c, stepTop c, stepBottom c, stepAdjUpLeft c, stepAdjUpRight c, stepAdjDownLeft c, stepAdjDownRight c]
+allStepsFrom c = [stepLeft c, stepRight c, stepTop c, stepBottom c]
 
 -- Make steps.
 makeSteps :: Cell -> [Cell] -> [Step]
