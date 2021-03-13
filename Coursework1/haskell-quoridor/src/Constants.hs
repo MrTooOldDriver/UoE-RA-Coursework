@@ -20,6 +20,7 @@ boardSize :: Int
 boardSize = 5
 -- boardSize = 9
 
+
 -- Number of players.
 numOfPlayers :: Int
 numOfPlayers = 2

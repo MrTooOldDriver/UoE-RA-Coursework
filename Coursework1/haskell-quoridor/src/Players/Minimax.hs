@@ -171,28 +171,23 @@ pruneBreadth i (StateTree v a) = StateTree v (take i [(a1, pruneBreadth i v1) | 
 --     | otherwise = -1 + maximum[utilityHelp (Game b ps) (cpast ++ [c]) (reachableCells b c) (interCount+1)|c <- cs, c `notElem` cpast]
 
 utility :: Game -> Int
-utility (Game b ps) = utilityLoop (Game b ps) [currentCell (head ps)] 0 1
--- utility (Game b ps) = utilityHelp (Game b ps) [] [currentCell (head ps)]
+utility (Game b ps) = utilityLoop (Game b ps) [currentCell (head ps)] 0
 
--- utilityHelp :: Game -> [Cell] -> [Cell] -> Int
--- utilityHelp (Game b ps) cpast cs
---     | intersect cs (winningPositions (head ps)) /= [] = -1
---     | null ([c |c <- cs, c `notElem` cpast]) = -10000
---     | intersect cs cpast == [] = -10000
---     | otherwise = -1 + maximum[utilityHelp (Game b ps) (cpast ++ [c]) (reachableCells b c)|c <- cs, c `notElem` cpast]
+utilityHelp :: Game -> [Cell] -> [Cell] -> Int
+utilityHelp (Game b ps) cpast cs
+    | utilityCheckWinnings cs (head ps) = -1
+    | null ([c |c <- cs, c `notElem` cpast]) = -10000
+    | otherwise = -1 + maximum[utilityHelp (Game b ps) (cpast ++ [c]) (reachableCells b c)|c <- cs, c `notElem` cpast]
 
--- utilityCheckWinnings :: [Cell] -> Player -> Bool
--- utilityCheckWinnings cs p = or[c `elem` (winningPositions p)|c <- cs]
+utilityCheckWinnings :: [Cell] -> Player -> Bool
+utilityCheckWinnings cs p = or[c `elem` (winningPositions p)|c <- cs]
 
 
-utilityLoop :: Game -> [Cell] -> Int -> Int -> Int
-utilityLoop (Game b ps) cs i counter
-    | counter >= boardSize * boardSize * boardSize  = i
+utilityLoop :: Game -> [Cell] -> Int -> Int
+utilityLoop (Game b ps) cs i
+    | i <= -(boardSize*2) = -10000
     | intersect cs (winningPositions (head ps)) /= [] = i
-    | otherwise = utilityLoop (Game b ps) (rmdups (concat[reachableCells b c | c<- cs]) ) (i-1) (counter+1)
-
-rmdups :: (Ord a) => [a] -> [a]
-rmdups = map head . group . sort
+    | otherwise = utilityLoop (Game b ps) (concat[reachableCells b c | c<- cs]) (i-1)
 
 -- reachableCells until upper bound
 
@@ -213,19 +208,18 @@ evalTree = mapStateTree utility
 -- [Hint 2: Use the 'Result' datatype.]
 minimaxFromTree :: EvalTree -> Action
 minimaxFromTree e = minimaxFromTreeConverter (maxFromTree e)
--- minimaxFromTree e = minimaxFromTreeConverter (minimaxFromTreeNew e)
 
-minimaxFromTreeNew :: EvalTree -> Result
-minimaxFromTreeNew (StateTree i []) = Result i []
-minimaxFromTreeNew (StateTree i as) = negResult (minimum( reverse [ addActionToResult a (minimaxFromTreeNew e) | (a,e) <- as ] ))
+-- minimaxFromTreeNew :: EvalTree -> Result
+-- minimaxFromTreeNew (StateTree i []) = Result i []
+-- minimaxFromTreeNew (StateTree i as) = negResult (minimum( [ addActionToResult a (minimaxFromTreeNew e) | (a,e) <- as ] ))
 
 minFromTree :: EvalTree -> Result
 minFromTree (StateTree i []) = Result i []
-minFromTree (StateTree _ as) = minimum (reverse [ addActionToResult a (maxFromTree e) | (a,e) <- as ])
+minFromTree (StateTree _ as) = minimum ([ addActionToResult a (maxFromTree e) | (a,e) <- as ])
 
 maxFromTree :: EvalTree -> Result
 maxFromTree (StateTree i []) = Result i []
-maxFromTree (StateTree _ as) = maximum (reverse [ addActionToResult a (minFromTree e) | (a,e) <- as ])
+maxFromTree (StateTree _ as) = maximum ([ addActionToResult a (minFromTree e) | (a,e) <- as ])
 
 addActionToResult :: Action -> Result -> Result
 addActionToResult a (Result i as) = Result i (a : as)
@@ -286,7 +280,7 @@ breadth = 10
 minimax :: Game -> Action
 minimax =
     --   minimaxFromTree -- or 'minimaxABFromTree'
-      minimaxABFromTree -- or 'miniåmaxABFromTree'
+      minimaxABFromTree -- or 'minimaxABFromTree'
     . pruneBreadth breadth
     . highFirst
     . evalTree
