@@ -17,8 +17,8 @@ import Types
 -- Board size. Everything should work by simply changing this number, however, we recommend that you
 -- keep it small to simplify the calculations. It should be odd and at least 3.
 boardSize :: Int
+-- boardSize = 5
 boardSize = 5
--- boardSize = 9
 
 -- Number of players.
 numOfPlayers :: Int

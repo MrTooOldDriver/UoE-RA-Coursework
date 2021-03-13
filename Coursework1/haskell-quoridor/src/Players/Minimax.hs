@@ -171,7 +171,7 @@ pruneBreadth i (StateTree v a) = StateTree v (take i [(a1, pruneBreadth i v1) | 
 --     | otherwise = -1 + maximum[utilityHelp (Game b ps) (cpast ++ [c]) (reachableCells b c) (interCount+1)|c <- cs, c `notElem` cpast]
 
 utility :: Game -> Int
-utility (Game b ps) = utilityHelp (Game b ps) [] (reachableCells b (currentCell (head ps)))
+utility (Game b ps) = utilityLoop (Game b ps) [currentCell (head ps)] 0
 
 utilityHelp :: Game -> [Cell] -> [Cell] -> Int
 utilityHelp (Game b ps) cpast cs
@@ -180,8 +180,14 @@ utilityHelp (Game b ps) cpast cs
     | otherwise = -1 + maximum[utilityHelp (Game b ps) (cpast ++ [c]) (reachableCells b c)|c <- cs, c `notElem` cpast]
 
 utilityCheckWinnings :: [Cell] -> Player -> Bool
-utilityCheckWinnings cs ps = or[c `elem` (winningPositions ps)|c <- cs]
+utilityCheckWinnings cs p = or[c `elem` (winningPositions p)|c <- cs]
 
+
+utilityLoop :: Game -> [Cell] -> Int -> Int
+utilityLoop (Game b ps) cs i
+    | i <= -(boardSize*2) = -10000
+    | intersect cs (winningPositions (head ps)) /= [] = i
+    | otherwise = utilityLoop (Game b ps) (concat[reachableCells b c | c<- cs]) (i-1)
 
 -- reachableCells until upper bound
 
@@ -268,7 +274,7 @@ depth = 4
 
 -- Given breadth for pruning.
 breadth :: Int
-breadth = 2
+breadth = 10
 
 -- Function that combines all the different parts implemented in Part I.
 minimax :: Game -> Action
