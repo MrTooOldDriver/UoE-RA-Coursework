@@ -29,12 +29,12 @@ version :: Version
 version = Version [1,0] []
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
 
-bindir     = "C:\\Users\\DXG\\Desktop\\UoE-RA-Coursework\\Coursework1\\haskell-quoridor\\.stack-work\\install\\bc1fd513\\bin"
-libdir     = "C:\\Users\\DXG\\Desktop\\UoE-RA-Coursework\\Coursework1\\haskell-quoridor\\.stack-work\\install\\bc1fd513\\lib\\x86_64-windows-ghc-8.8.4\\haskell-quoridor-1.0-D4u9mCQdYYCL8cczJwjVpX"
-dynlibdir  = "C:\\Users\\DXG\\Desktop\\UoE-RA-Coursework\\Coursework1\\haskell-quoridor\\.stack-work\\install\\bc1fd513\\lib\\x86_64-windows-ghc-8.8.4"
-datadir    = "C:\\Users\\DXG\\Desktop\\UoE-RA-Coursework\\Coursework1\\haskell-quoridor\\.stack-work\\install\\bc1fd513\\share\\x86_64-windows-ghc-8.8.4\\haskell-quoridor-1.0"
-libexecdir = "C:\\Users\\DXG\\Desktop\\UoE-RA-Coursework\\Coursework1\\haskell-quoridor\\.stack-work\\install\\bc1fd513\\libexec\\x86_64-windows-ghc-8.8.4\\haskell-quoridor-1.0"
-sysconfdir = "C:\\Users\\DXG\\Desktop\\UoE-RA-Coursework\\Coursework1\\haskell-quoridor\\.stack-work\\install\\bc1fd513\\etc"
+bindir     = "C:\\Users\\DXG\\Desktop\\UoE-RA-Coursework\\Coursework1\\Inf2d-ass1-s1904845\\haskell-quoridor\\.stack-work\\install\\bc1fd513\\bin"
+libdir     = "C:\\Users\\DXG\\Desktop\\UoE-RA-Coursework\\Coursework1\\Inf2d-ass1-s1904845\\haskell-quoridor\\.stack-work\\install\\bc1fd513\\lib\\x86_64-windows-ghc-8.8.4\\haskell-quoridor-1.0-D4u9mCQdYYCL8cczJwjVpX"
+dynlibdir  = "C:\\Users\\DXG\\Desktop\\UoE-RA-Coursework\\Coursework1\\Inf2d-ass1-s1904845\\haskell-quoridor\\.stack-work\\install\\bc1fd513\\lib\\x86_64-windows-ghc-8.8.4"
+datadir    = "C:\\Users\\DXG\\Desktop\\UoE-RA-Coursework\\Coursework1\\Inf2d-ass1-s1904845\\haskell-quoridor\\.stack-work\\install\\bc1fd513\\share\\x86_64-windows-ghc-8.8.4\\haskell-quoridor-1.0"
+libexecdir = "C:\\Users\\DXG\\Desktop\\UoE-RA-Coursework\\Coursework1\\Inf2d-ass1-s1904845\\haskell-quoridor\\.stack-work\\install\\bc1fd513\\libexec\\x86_64-windows-ghc-8.8.4\\haskell-quoridor-1.0"
+sysconfdir = "C:\\Users\\DXG\\Desktop\\UoE-RA-Coursework\\Coursework1\\Inf2d-ass1-s1904845\\haskell-quoridor\\.stack-work\\install\\bc1fd513\\etc"
 
 getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath
 getBinDir = catchIO (getEnv "haskell_quoridor_bindir") (\_ -> return bindir)

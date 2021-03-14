@@ -1,28 +1,28 @@
-C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\haskell-quoridor\src\Players\Reed.hs:
+C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\Inf2d-ass1-s1904845\haskell-quoridor\src\Players\Reed.hs:
   hash: c81687499a09cb630ff99d875e208fc97f306fc105824278c91bee25662219dc
-C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\haskell-quoridor\src\Board.hs:
-  hash: d753ce7cf6e06e8004af08aee42c0dd7e189509ea8c202a3c4f54e91e2b23ba8
-C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\haskell-quoridor\haskell-quoridor.cabal:
-  hash: 02f320e55ae0854a530708cd3613cab5331dfbdd8b9338f9fb64aa3abb812a3d
-C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\haskell-quoridor\src\Player.hs:
-  hash: 24b9f998d2246b2d8408a1e9bf9474ab27c9c2d9d94a716e843f1581c23a69df
-C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\haskell-quoridor\src\Players\Minimax.hs:
-  hash: c2e86331a535009290379665c5f643342d4de9ed07637abcede1bb4976cd3361
-C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\haskell-quoridor\src\Types.hs:
-  hash: 2a9a1242c6f1c32142b8b77e2e704ab4cf50323071edb9b5916a9cca9b101033
-C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\haskell-quoridor\src\Players\Human.hs:
-  hash: 06b986dc99e442d4fab2a132bf27873f228cef237575450ee84564a00b76faab
-C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\haskell-quoridor\README.md:
-  hash: 065891b9a0facf86030ba6805b4ca58b449eecb786de90c38f9f303dc5aefbad
-C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\haskell-quoridor\src\Cell.hs:
-  hash: feb2d30590f389402381e53edd05f3cb3aaef922aa0e9c4d8108d6482ef55ad4
-C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\haskell-quoridor\src\Game.hs:
-  hash: 6310b81be26bf9cdbf64061b6ba4bb4a738f26f80b3680d4efe1e57812635846
-C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\haskell-quoridor\src\Action.hs:
-  hash: 85857e6cf775f0271927dea6149bbdd153484e8e7c35f941bb756bf99bf8504b
-C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\haskell-quoridor\src\Print.hs:
-  hash: d01b7734320f5f626e05be68566c69722b01e3322b589539ea7815796e34e381
-C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\haskell-quoridor\src\Players\Dumb.hs:
-  hash: 565409dfeb7ca9040dba5a95f7c9a77aa963c4ae43d8070ccea559999b60a32f
-C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\haskell-quoridor\src\Constants.hs:
+C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\Inf2d-ass1-s1904845\haskell-quoridor\src\Constants.hs:
   hash: b216ef26af0ab54be214dbf615ea3965376dbd0906b3cd685bbac3eb76a2eeda
+C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\Inf2d-ass1-s1904845\haskell-quoridor\src\Types.hs:
+  hash: 2a9a1242c6f1c32142b8b77e2e704ab4cf50323071edb9b5916a9cca9b101033
+C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\Inf2d-ass1-s1904845\haskell-quoridor\src\Players\Human.hs:
+  hash: 06b986dc99e442d4fab2a132bf27873f228cef237575450ee84564a00b76faab
+C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\Inf2d-ass1-s1904845\haskell-quoridor\src\Players\Minimax.hs:
+  hash: c2e86331a535009290379665c5f643342d4de9ed07637abcede1bb4976cd3361
+C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\Inf2d-ass1-s1904845\haskell-quoridor\src\Print.hs:
+  hash: d01b7734320f5f626e05be68566c69722b01e3322b589539ea7815796e34e381
+C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\Inf2d-ass1-s1904845\haskell-quoridor\src\Players\Dumb.hs:
+  hash: 565409dfeb7ca9040dba5a95f7c9a77aa963c4ae43d8070ccea559999b60a32f
+C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\Inf2d-ass1-s1904845\haskell-quoridor\src\Board.hs:
+  hash: d753ce7cf6e06e8004af08aee42c0dd7e189509ea8c202a3c4f54e91e2b23ba8
+C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\Inf2d-ass1-s1904845\haskell-quoridor\haskell-quoridor.cabal:
+  hash: 02f320e55ae0854a530708cd3613cab5331dfbdd8b9338f9fb64aa3abb812a3d
+C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\Inf2d-ass1-s1904845\haskell-quoridor\README.md:
+  hash: 065891b9a0facf86030ba6805b4ca58b449eecb786de90c38f9f303dc5aefbad
+C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\Inf2d-ass1-s1904845\haskell-quoridor\src\Game.hs:
+  hash: 6310b81be26bf9cdbf64061b6ba4bb4a738f26f80b3680d4efe1e57812635846
+C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\Inf2d-ass1-s1904845\haskell-quoridor\src\Action.hs:
+  hash: 85857e6cf775f0271927dea6149bbdd153484e8e7c35f941bb756bf99bf8504b
+C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\Inf2d-ass1-s1904845\haskell-quoridor\src\Cell.hs:
+  hash: feb2d30590f389402381e53edd05f3cb3aaef922aa0e9c4d8108d6482ef55ad4
+C:\Users\DXG\Desktop\UoE-RA-Coursework\Coursework1\Inf2d-ass1-s1904845\haskell-quoridor\src\Player.hs:
+  hash: 24b9f998d2246b2d8408a1e9bf9474ab27c9c2d9d94a716e843f1581c23a69df
