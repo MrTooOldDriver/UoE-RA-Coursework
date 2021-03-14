@@ -1,0 +1,85 @@
+*** PART III (10 pt) ***
+
+Is it a good idea to start the game with the Reed opening?
+
+Answer here.
+Reed player implementation: place two walls at the start then do minimax.
+My plan:
+First. I will play with the minimax player. Then I will play with the reed player.
+I will analysis the path of reed player takes
+Second. I will use a minimax player to play with the reed player.
+I will analysis the path they take and the total turn number to determine if it is a good opening.
+As well as compare the result with minimax player play with minimax player.
+
+Result:
+1. By playing with reed player. It is easy to see that this opening is good for player X.
+Using two walls to create a gap in the middle that it is close to player X. So player X could
+enter the gap earlier than player Y. Then since this path is blocked by player X, player Y
+have to wait for the gap to be cleared.
+But this opening will not bring too much advantage to player X. Since it is easy to just place a
+wall at e4h to force player x to move in another direction. Then Player Y could still win.
+
+Here is the result of me playing with the reed:
+Player Y wins. Turn Number:12
+
+  a9-- b9-- c9-- d9-- e9-- f9-- g9-- h9-- i9
+  |    |    |    |    |    |    |    |    |
+  |    |    |    |    |    |    |    |    |
+  a8-- b8-- X -- d8-- e8-- f8-- g8-- h8-- i8
+  |    |    |    |    |    |    |    |    |
+  |    |    |    |    |    |    |    |    |
+  a7-- b7-- c7-- d7-- e7-- f7-- g7-- h7-- i7
+  |    |    |    |    |    |    |    |    |
+  |    |    |    |    |    |    |    |    |
+  a6-- b6-- c6-- d6-- e6-- f6-- g6-- h6-- i6
+  |    |    |    |    |    |    |    |    |
+  |    |    |    |    |    |    |    |    |
+  a5-- b5-- c5-- d5-- e5-- f5-- g5-- h5-- i5
+  |    |    |    |              |    |    |
+  |    |    |    |              |    |    |
+  a4-- b4-- c4-- d4-- e4-- f4-- g4-- h4-- i4
+  |    |              |              |    |
+  |    |              |              |    |
+  a3-- b3-- c3-- d3-- e3-- f3-- g3-- h3-- i3
+  |    |    |    |    |    |    |    |    |
+  |    |    |    |    |    |    |    |    |
+  a2-- b2-- c2-- d2-- e2-- f2-- g2-- h2-- i2
+  |    |    |    |    |    |    |    |    |
+  |    |    |    |    |    |    |    |    |
+  a1-- b1-- c1-- d1-- Y -- f1-- g1-- h1-- i1
+
+
+  2.By using a minimax player to play with a reed player. Again verify that the gap will bring advantage to player X.
+  This time is the reed player win. However when I comparing the result with minimax player play with minimax player result.
+
+  Minimax - Minimax Result:                             Reed - Minimax Result:
+  Player X wins. Turn Number:10                         Player X wins. Turn Number:11
+  a9-- b9-- c9-- d9-- e9-- X -- g9-- h9-- i9            a9-- b9-- c9-- d9-- X -- f9-- g9-- h9-- i9
+  |    |    |    |    |    |    |    |    |             |    |    |    |    |    |    |    |    |
+  |    |    |    |    |    |    |    |    |             |    |    |    |    |    |    |    |    |
+  a8-- b8-- c8-- d8-- e8-- f8-- g8-- h8-- i8            a8-- b8-- c8-- d8-- e8-- f8-- g8-- h8-- i8
+  |    |    |    |    |    |    |    |    |             |    |    |    |    |    |    |    |    |
+  |    |    |    |    |    |    |    |    |             |    |    |    |    |    |    |    |    |
+  a7-- b7-- c7-- d7-- e7-- f7-- g7-- h7-- i7            a7-- b7-- c7-- d7-- e7-- f7-- g7-- h7-- i7
+  |    |    |    |    |    |    |    |    |             |    |    |    |    |    |    |    |    |
+  |    |    |    |    |    |    |    |    |             |    |    |    |    |    |    |    |    |
+  a6-- b6-- c6-- d6-- e6-- f6-- g6-- h6-- i6            a6-- b6-- c6-- d6-- e6-- f6-- g6-- h6-- i6
+  |    |    |    |    |    |    |    |    |             |    |    |    |    |    |    |    |    |
+  |    |    |    |    |    |    |    |    |             |    |    |    |    |    |    |    |    |
+  a5-- b5-- c5-- d5   e5   f5-- g5-- h5-- i5            a5-- b5-- c5-- d5-- e5-- f5-- g5-- h5-- i5
+  |    |    |    |    |    |    |    |    |             |    |    |    |    |    |    |    |    |
+  |    |    |    |    |    |    |    |    |             |    |    |    |    |    |    |    |    |
+  a4-- b4-- c4-- d4   e4   f4-- g4-- h4-- i4            a4-- b4-- c4-- d4-- e4-- f4-- g4-- h4-- i4
+  |    |    |    |    |    |    |    |    |             |    |              |              |    |
+  |    |    |    |    |    |    |    |    |             |    |              |              |    |
+  a3-- b3-- c3-- d3-- Y -- f3-- g3-- h3-- i3            a3-- b3-- c3-- d3-- e3-- f3-- g3-- h3-- i3
+  |    |    |    |    |    |    |    |    |             |    |    |    |    |    |    |    |    |
+  |    |    |    |    |    |    |    |    |             |    |    |    |    |    |    |    |    |
+  a2-- b2-- c2-- d2-- e2-- f2-- g2-- h2-- i2            a2-- b2-- c2-- d2-- Y -- f2-- g2-- h2-- i2
+  |    |    |    |    |    |    |    |    |             |    |    |    |    |    |    |    |    |
+  |    |    |    |    |    |    |    |    |             |    |    |    |    |    |    |    |    |
+  a1-- b1-- c1-- d1-- e1-- f1-- g1-- h1-- i1            a1-- b1-- c1-- d1-- e1-- f1-- g1-- h1-- i1
+
+We could see that reed opening doesn't bring too much advantage to player X. Player Y even able to move closer to the
+winning state.
+In conclusion, Reed opening is not a good opening because it doesn't bring too much advantage to the player.
