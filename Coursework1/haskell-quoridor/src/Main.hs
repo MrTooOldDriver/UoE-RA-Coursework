@@ -64,7 +64,7 @@ nameToPlayerConstructor :: String -> Maybe (String -> Cell -> Int -> [Cell] -> P
 nameToPlayerConstructor "Human" = Just makeHumanPlayer
 nameToPlayerConstructor "Dumb" = Just makeDumbPlayer
 nameToPlayerConstructor "Minimax" = Just makeMinimaxPlayer
-nameToPlayerConstructor "MinimaxEZ" = Just makeMinimaxPlayerEZ
+nameToPlayerConstructor "MinimaxEZ" = Just makeMinimaxEZPlayer
 nameToPlayerConstructor "Reed" = Just makeReedPlayer
 nameToPlayerConstructor _ = Nothing
 
@@ -82,9 +82,9 @@ play g@(Game b ps) =
     let p1 = currentPlayer ps 
         p2 = previousPlayer ps in 
     if (hasWon p2) 
-        then do { putStrLn ("\nPlayer " ++ (name p2) ++ " wins."); printGame g }
+        then do { putStrLn ("\nPlayer " ++ (name p2) ++ " wins. Turn Number:" ++ (show (turn p2))); printGame g }
         else do {
-            putStrLn ("\nPlayer " ++ (name p1) ++ "'s turn."); printGame g; 
+            putStrLn ("\nPlayer " ++ (name p1) ++ "'s turn. Turn Number:" ++ (show (turn p1))); printGame g; 
             r <- evalRandIO rand;
             if (isHuman p1) 
                 then do { command<-getLine; playCommand p1 b ps command r }
