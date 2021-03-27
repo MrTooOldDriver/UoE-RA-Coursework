@@ -1,0 +1,89 @@
+TODO CHANGE. REFER CW2 PPT
+
+Task 1.1
+For each object define an atemporal predicate:
+Object(x) - True if x is a object
+Sword(x) - True if object x is sward
+BoTheseus(x) - True if x is BoTheseus
+Minobot(x) - True if x is Minobot
+
+Connect(x,y) - True if room x and room y is connect
+At(x,y) - True if x in room y
+
+Defeated(x) - True if x is defeated
+Holding(x,y) - True if x is holding y
+
+Initial state:
+Connect(F,E) Connect(E,B) Connect(B,C) Connect(C,D) Connect(B,A) Connect(A,L)
+Minobot(M) BoTheseus(T) Sword(S) Object(S)
+At(M,L) At(T,E) At(S,D)
+
+
+
+Task 1.2
+Action(Move(t,x,y))
+precondition: BoTheseus(t), At(t,x), Connect(x,y)
+Effect: ¬At(t,x) At(t,y)
+
+Action(Pickup(t,o))
+Precondition: BoTheseus(t), ¬Holding(t,y), Object(o), At(t,x), At(o,x)
+Effect: Holding(t,o), ¬At(o,x)
+
+Action(Slay(t, m))
+Precondition: BoTheseus(t), Minobot(m), At(m,x), At(t,x), Holding(t,s), Sword(s), Object(s)
+Effect: Defeated(m)
+
+
+Task 1.3
+Starting state: 
+Connect(B,A), Connect(A,L),
+Minobot(M), BoTheseus(T), Sword(S), Object(S),
+At(M,L), At(T,B), At(S,A)
+
+Initial goal state:  Defeated(m)
+
+Step1
+Current goal state: Defeated(m)
+Relevant action:
+Slay - Becuase it is the only action that effect contain Defrated
+Choose action: Slay(T,M)
+New goal state: BoTheseus(T), Minobot(M), At(M,L), At(T,L), Holding(T,S), Sword(S), Object(S)
+
+Step2 
+Current goal state: BoTheseus(T), Minobot(M), At(M,L), At(T,L), Holding(T,S), Sword(S), Object(S)
+Relevant action:
+Move - Becuase it is the only action that effect contain At
+Pickup  - Becuase it is the only action that effect contain Holding
+Choose action: Move(T,A,L)
+New goal state: BoTheseus(T), Minobot(M), At(M,L), At(T,A), Holding(T,S), Sword(S), Object(S), Connect(A,L)
+
+Step3
+Current goal state: BoTheseus(T), Minobot(M), At(M,L), At(T,A), Holding(T,S), Sword(S), Object(S), Connect(A,L)
+Relevant action:
+Move - Becuase it is the only action that effect contain At
+Pickup  - Becuase it is the only action that effect contain Holding
+Choose action: Pickup(T,S)
+New goal state: BoTheseus(T), Minobot(M), At(M,L), At(T,A), At(S,A), Sword(S), Object(S), Connect(A,L)
+
+Step4
+Current goal state: BoTheseus(T), Minobot(M), At(M,L), At(T,A), At(S,A), Sword(S), Object(S), Connect(A,L)
+Relevant action:
+Move - Becuase it is the only action that effect contain At
+Choose action: Move(T,B,A)
+New goal state: BoTheseus(T), Minobot(M), At(M,L), At(T,B), At(S,A), Sword(S), Object(S), Connect(B,A), Connect(A,L)
+
+Step5
+Current goal state: 
+BoTheseus(T), Minobot(M), At(M,L), At(T,B), At(S,A), Sword(S), Object(S), Connect(B,A), Connect(A,L)
+Statisfied by initial starting state: 
+Connect(B,A), Connect(A,L), Minobot(M), BoTheseus(T), Sword(S), Object(S), At(M,L), At(T,B), At(S,A)
+Hence terminates.
+Plan: Move(T,B,A) -> Pickup(T,S) -> Move(T,A,L) -> Slay(T,M)
+
+
+
+
+
+
+
+
