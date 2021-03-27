@@ -12,6 +12,7 @@ At(x,y) - True if x in room y
 
 Defeated(x) - True if x is defeated
 Holding(x,y) - True if x is holding y
+EmptyHand(x) True if x has empty hand (not holding anything)
 
 Initial state:
 Connect(F,E) Connect(E,B) Connect(B,C) Connect(C,D) Connect(B,A) Connect(A,L)

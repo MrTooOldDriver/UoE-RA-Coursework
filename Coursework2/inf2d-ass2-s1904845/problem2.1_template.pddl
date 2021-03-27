@@ -1,22 +1,43 @@
 (define (problem travelling-21)
     (:domain travelling)
     (:objects
-        Agent - agent
-	x - type1
-	y z - subtype1
+        B - location
+        A - location
+        L - location
+        E - location
+        F - location
+        D - location
+        C - location
+        M - player
+        T - player
+        S - item
     )
 
     (:init
-	(example2 )
-	(example-predicate x)
-	
-        (= (f y) 10)
-	(= (f z) 5)
+        (Connect B A)
+        (Connect A L)
+        (connect E B)
+        (connect E F)
+        (connect B C)
+        (connect C D)
+        (Connect A B)
+        (Connect L A)
+        (connect B E)
+        (connect F E)
+        (connect C B)
+        (connect D C)
+        (Minobot M)
+        (BoTheseus T)
+        (Sword S)
+        (Object S)
+        (At M L)
+        (At T E)
+        (At S D)
+        (EmptyHand T)
     )
 
     (:goal (and
-	(not (example-predicate x))
-
+	    (Defeated M)
     )
   )
 )

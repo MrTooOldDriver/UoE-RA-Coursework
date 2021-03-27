@@ -2,9 +2,9 @@
     (:requirements :adl )
 
     (:types
-        type1
-        subtype1 - type2
-        ;; Fill in additional types here
+        player
+        location
+        item
     )
 
     (:constants
@@ -13,23 +13,32 @@
     )
 
     (:predicates
-	(example-predicate ?x - type1)
-	(example2 )
-
+	    (Sword ?s - item)
+        (Object ?o - item)
+        (BoTheseus ?t - player)
+        (Minobot ?m - player)
+        (Connect ?x - location ?y - location)
+        (At ?o - object ?l - location)
+        (Defeated ?d - player)
+        (Holding ?p - player ?o - item)
+        (EmptyHand ?p - player)
     )
 
-    (:functions (f ?x - type2 ))
+    (:action MOVE
+        :parameters (?t -player ?x - location ?y - location)
+        :precondition (and (BoTheseus ?t) (At ?t ?x) (Connect ?x ?y))
+        :effect (and (At ?t ?y) (not (At ?t ?x)))
+    )
 
+    (:action PICKUP
+        :parameters (?t -player ?o - item ?x - location)
+        :precondition (and (BoTheseus ?t) (not(Holding ?t ?o)) (Object ?o) (At ?t ?x) (At ?o ?x) (EmptyHand ?t))
+        :effect (and (Holding ?t ?o) (not (At ?o ?x)) (not (EmptyHand ?t)))
+    )
 
-    (:action example 
-      :parameters (?x - type1 ?y - subtype1)
-      :precondition (and
-	  (example-predicate ?x)
-          (>= (f ?y) 4)
-      )
-      :effect (and
-	  (not (example-predicate ?x))
-          (decrease (f ?y) 3)
-          )
+    (:action SLAY
+        :parameters (?t -player ?m - player ?x - location ?s - item)
+        :precondition (and (BoTheseus ?t) (Minobot ?m) (At ?m ?x) (At ?t ?x) (Holding ?t ?s) (Sword ?s) (Object ?s))
+        :effect (and (Defeated ?m))
     )
 )
