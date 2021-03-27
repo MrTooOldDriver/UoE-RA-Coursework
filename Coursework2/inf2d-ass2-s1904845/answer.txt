@@ -1,21 +1,18 @@
-TODO CHANGE. REFER CW2 PPT
 
 Task 1.1
-For each object define an atemporal predicate:
+Predicates:
 Object(x) - True if x is a object
 Sword(x) - True if object x is sward
 BoTheseus(x) - True if x is BoTheseus
 Minobot(x) - True if x is Minobot
-
 Connect(x,y) - True if room x and room y is connect
 At(x,y) - True if x in room y
-
 Defeated(x) - True if x is defeated
 Holding(x,y) - True if x is holding y
-EmptyHand(x) True if x has empty hand (not holding anything)
 
 Initial state:
 Connect(F,E) Connect(E,B) Connect(B,C) Connect(C,D) Connect(B,A) Connect(A,L)
+Connect(E,F) Connect(B,E) Connect(C,B) Connect(D,C) Connect(A,B) Connect(L,A)
 Minobot(M) BoTheseus(T) Sword(S) Object(S)
 At(M,L) At(T,E) At(S,D)
 
@@ -23,7 +20,7 @@ At(M,L) At(T,E) At(S,D)
 
 Task 1.2
 Action(Move(t,x,y))
-precondition: BoTheseus(t), At(t,x), Connect(x,y)
+precondition: BoTheseus(t), At(t,x), Connect(x,y), 
 Effect: ¬At(t,x) At(t,y)
 
 Action(Pickup(t,o))
@@ -46,30 +43,30 @@ Initial goal state:  Defeated(m)
 Step1
 Current goal state: Defeated(m)
 Relevant action:
-Slay - Becuase it is the only action that effect contain Defrated
+Slay(T,M) - Becuase it is the only action that effect contain Defrated
 Choose action: Slay(T,M)
 New goal state: BoTheseus(T), Minobot(M), At(M,L), At(T,L), Holding(T,S), Sword(S), Object(S)
 
 Step2 
 Current goal state: BoTheseus(T), Minobot(M), At(M,L), At(T,L), Holding(T,S), Sword(S), Object(S)
 Relevant action:
-Move - Becuase it is the only action that effect contain At
-Pickup  - Becuase it is the only action that effect contain Holding
+Move(T,A,L) - Becuase it is the only action that effect contain At(M,L)
+Pickup(T,S)  - Becuase it is the only action that effect contain Holding(T,S)
 Choose action: Move(T,A,L)
 New goal state: BoTheseus(T), Minobot(M), At(M,L), At(T,A), Holding(T,S), Sword(S), Object(S), Connect(A,L)
 
 Step3
 Current goal state: BoTheseus(T), Minobot(M), At(M,L), At(T,A), Holding(T,S), Sword(S), Object(S), Connect(A,L)
 Relevant action:
-Move - Becuase it is the only action that effect contain At
-Pickup  - Becuase it is the only action that effect contain Holding
+Move(T,B,A) - Becuase it is the only action that effect contain At(T,B)
+Pickup(T,S)  - Becuase it is the only action that effect contain Holding(T,S)
 Choose action: Pickup(T,S)
 New goal state: BoTheseus(T), Minobot(M), At(M,L), At(T,A), At(S,A), Sword(S), Object(S), Connect(A,L)
 
 Step4
 Current goal state: BoTheseus(T), Minobot(M), At(M,L), At(T,A), At(S,A), Sword(S), Object(S), Connect(A,L)
 Relevant action:
-Move - Becuase it is the only action that effect contain At
+Move - Becuase it is the only action that effect contain At(T,B)
 Choose action: Move(T,B,A)
 New goal state: BoTheseus(T), Minobot(M), At(M,L), At(T,B), At(S,A), Sword(S), Object(S), Connect(B,A), Connect(A,L)
 
