@@ -40,6 +40,7 @@ At(M,L), At(T,B), At(S,A)
 
 Initial goal state:  Defeated(m)
 
+Starting from goal state
 Step1
 Current goal state: Defeated(m)
 Relevant action:
